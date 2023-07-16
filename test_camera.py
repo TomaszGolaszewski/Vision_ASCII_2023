@@ -4,11 +4,15 @@
 # import the opencv library
 import cv2
 import numpy as np
+import time
   
 # define a video capture object
 vid = cv2.VideoCapture(0)
 
+# prepare for time measurement
 i = 0
+last_time = time.time()
+
 while(True):
       
     # capture the video frame
@@ -24,17 +28,20 @@ while(True):
     cv2.imshow('frame', frame)
     cv2.imshow('gray', gray)
     cv2.imshow('hsv_image', hsv_image)
-      
-    # the 'q' button is set as the
-    # quitting button you may use any
-    # desired button of your choice
+
+    # the 'q' button is set as the quitting button you may use any desired button of your choice
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
 
-    print(i)
-    i+=1
+    # measure time
+    if time.time() > last_time + 1:
+        last_time = time.time()
+        print("FPS:" + str(i))
+        i = 0
+    else:
+        i+=1
   
-# After the loop release the cap object
+# after the loop release the cap object
 vid.release()
-# Destroy all the windows
+# destroy all the windows
 cv2.destroyAllWindows()

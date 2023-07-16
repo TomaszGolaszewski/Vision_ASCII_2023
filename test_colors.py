@@ -1,10 +1,14 @@
 import numpy as np
 import cv2
-  
+import time 
   
 # capturing video through webcam
 webcam = cv2.VideoCapture(0)
-  
+
+# prepare for time measurement
+i = 0
+last_time = time.time()
+
 # start a while loop
 while(1):
       
@@ -18,7 +22,7 @@ while(1):
     red_lower = np.array([136, 87, 111], np.uint8)
     red_upper = np.array([180, 255, 255], np.uint8)
     red_mask = cv2.inRange(hsvFrame, red_lower, red_upper)
-    cv2.imshow('red_mask', red_mask)# show window for testing purposes
+    # cv2.imshow('red_mask', red_mask) # show window for testing purposes
   
     # set range for green color and define mask
     green_lower = np.array([25, 52, 72], np.uint8)
@@ -36,10 +40,10 @@ while(1):
       
     # for red color
     red_mask = cv2.dilate(red_mask, kernel)
-    cv2.imshow('red_mask_2', red_mask) # show window for testing purposes
+    # cv2.imshow('red_mask_2', red_mask) # show window for testing purposes
     res_red = cv2.bitwise_and(imageFrame, imageFrame, 
                               mask = red_mask)
-    cv2.imshow('res_red', res_red) # show window for testing purposes
+    # cv2.imshow('res_red', res_red) # show window for testing purposes
       
     # for green color
     green_mask = cv2.dilate(green_mask, kernel)
@@ -103,6 +107,14 @@ while(1):
               
     # draw window
     cv2.imshow("Multiple Color Detection in Real-TIme", imageFrame)
+
+    # measure time
+    if time.time() > last_time + 1:
+        last_time = time.time()
+        print("FPS:" + str(i))
+        i = 0
+    else:
+        i+=1
 
     # program termination
     if cv2.waitKey(10) & 0xFF == ord('q'):
