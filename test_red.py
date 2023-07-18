@@ -23,7 +23,7 @@ while(True):
     red_lower = np.array([136, 87, 111], np.uint8)
     red_upper = np.array([180, 255, 255], np.uint8)
     red_mask = cv2.inRange(hsvFrame, red_lower, red_upper)
-    cv2.imshow('red_mask', red_mask) # show window for testing purposes
+    # cv2.imshow('red_mask', red_mask) # show window for testing purposes
     # print(red_mask.shape) # show window dimensions for testing purposes # (480, 640)
 
     # morphological transform, dilation for each color and bitwise_and operator
@@ -31,14 +31,14 @@ while(True):
     kernel = np.ones((5, 5), "uint8")
 
     # for red color
-    red_mask = cv2.dilate(red_mask, kernel)
-    cv2.imshow('red_mask_2', red_mask) # show window for testing purposes
+    red_mask_2 = cv2.dilate(red_mask, kernel)
+    # cv2.imshow('red_mask_2', red_mask_2) # show window for testing purposes
     res_red = cv2.bitwise_and(imageFrame, imageFrame, 
-                              mask = red_mask)
-    cv2.imshow('res_red', res_red) # show window for testing purposes
+                              mask = red_mask_2)
+    # cv2.imshow('res_red', res_red) # show window for testing purposes
 
     # creating contour to track red color
-    contours, hierarchy = cv2.findContours(red_mask,
+    contours, hierarchy = cv2.findContours(red_mask_2,
                                            cv2.RETR_TREE,
                                            cv2.CHAIN_APPROX_SIMPLE)
       
@@ -64,9 +64,16 @@ while(True):
             cv2.putText(imageFrame, "Red Colour", (x, y),
                         cv2.FONT_HERSHEY_SIMPLEX, 1.0,
                         (0, 0, 255))   
-            
+    
+    # concatenate images
+    row1 = np.concatenate((red_mask, red_mask_2), axis=1)
+    row1_color = cv2.cvtColor(row1, cv2.COLOR_GRAY2BGR) # convert array from 1 to 3 channels
+    row2 = np.concatenate((res_red, imageFrame), axis=1)
+    allImages = np.concatenate((row1_color, row2), axis=0)
+
     # draw window
-    cv2.imshow("Red Color Detection in Real-TIme", imageFrame)
+    # cv2.imshow("Red Color Detection in Real-TIme", imageFrame)
+    cv2.imshow("Red Color Detection in Real-TIme", allImages)
 
     # measure time
     if time.time() > last_time + 1:
