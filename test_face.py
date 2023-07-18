@@ -5,10 +5,12 @@ import os
 
 # path to trained classifiers
 cv2_base_dir = os.path.dirname(os.path.abspath(cv2.__file__))
-haar_model = os.path.join(cv2_base_dir, 'data/haarcascade_frontalface_default.xml')
+haar_model_face = os.path.join(cv2_base_dir, 'data/haarcascade_frontalface_default.xml')
+haar_model_eye = os.path.join(cv2_base_dir, 'data/haarcascade_eye.xml')
 
 # load trained classifiers
-faceCascade = cv2.CascadeClassifier(haar_model)
+faceCascade = cv2.CascadeClassifier(haar_model_face)
+eyeCascade = cv2.CascadeClassifier(haar_model_eye)
 
 # capturing video through webcam
 webcam = cv2.VideoCapture(0)
@@ -42,22 +44,35 @@ while(True):
         minNeighbors=5,
         minSize=(50, 50)
     )
-
-    # draw rectangle and add text 
     for face in faces:
         x, y, w, h = face
+
+        # detect eyes
+        eyes = eyeCascade.detectMultiScale(gray[y: y+h//2, x:x+w], minNeighbors=5) # h//2 is to hide mouth
+
+        # draw rectangle and add text for face
         imageFrame = cv2.rectangle(imageFrame, (x, y), 
                                     (x + w, y + h), 
                                     (0, 0, 255), 2)            
-        cv2.putText(imageFrame, "Face", (x, y),
+        cv2.putText(imageFrame, "Face", (x, y - 4),
                     cv2.FONT_HERSHEY_SIMPLEX, 1.0,
                     (0, 0, 255))  
+        # blur face
         # blur = cv2.blur(imageFrame[y: y+h, x:x+w], ksize=(50,50))
         # imageFrame[y: y+h, x:x+w] = blur
 
+        # draw rectangle and add text for eyes
+        for eye in eyes:
+            ex, ey, ew, eh = eye
+            imageFrame = cv2.rectangle(imageFrame, (x + ex, y + ey), 
+                                    (x + ex + ew, y + ey + eh), 
+                                    (0, 255, 0), 2)            
+            cv2.putText(imageFrame, "Eye", (x + ex, y + ey - 4),
+                    cv2.FONT_HERSHEY_SIMPLEX, 1.0,
+                    (0, 255, 0)) 
+
     # draw window
     cv2.imshow("Face Detection in Real-TIme", imageFrame)
-    # cv2.imshow("Blured Face", blurFrame)
 
     # measure time
     if time.time() > last_time + 1:
@@ -71,5 +86,6 @@ while(True):
     if cv2.waitKey(10) & 0xFF == ord('q'):
         break
 
+# clean up
 webcam.release()
 cv2.destroyAllWindows()
