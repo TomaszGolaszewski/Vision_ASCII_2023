@@ -4,6 +4,7 @@
 
 # Quick project to check metaballs and color palette behavior
 
+import os
 import pygame
 import random
 import math
@@ -41,7 +42,8 @@ class Ball:
     def metaball_dist(self, x, y):
         amplification = AMPLIFICATION
         dist_from_ball = math.sqrt((self.x - x) ** 2 + (self.y - y) ** 2)
-        if dist_from_ball < 1: dist_from_ball = 1
+        if dist_from_ball < 1: 
+            dist_from_ball = 1
 
         return amplification / dist_from_ball
         
@@ -56,8 +58,10 @@ def get_rand_color():
 def get_1D_color(x):
 # return color from blue for 0 to red for 255
     x = int(x)
-    if x < 0: return (0, 0, 0)
-    if x > 255: return (255, 255, 255) # , 0, 0) #
+    if x < 0: 
+        return (0, 0, 0)
+    if x > 255: 
+        return (255, 255, 255)
     
     red = x
     green = 0
@@ -67,9 +71,11 @@ def get_1D_color(x):
 def get_2D_color(x, y):
 # return color from blue for 0 to red for 255
     x = int(x)
-    if x < 0 or x > 255: return (0, 0, 0)
+    if x < 0 or x > 255: 
+        return (0, 0, 0)
     y = int(y)
-    if y < 0 or y > 255: return (0, 0, 0)
+    if y < 0 or y > 255: 
+        return (0, 0, 0)
     
     red = x
     green = y
@@ -86,9 +92,9 @@ def run():
 
 # initialize the pygame
     pygame.init()
-    pygame.display.set_caption("Rainbow")
-    # ICON_IMGS = pygame.image.load(os.path.join(*ICON_PATH))
-    # pygame.display.set_icon(ICON_IMGS)
+    pygame.display.set_caption("Glowing Balls")
+    ICON_IMGS = pygame.image.load(os.path.join("imgs", "icon.png"))
+    pygame.display.set_icon(ICON_IMGS)
     WIN = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT))
     BUFFER = pygame.Surface((BUFFER_WIDTH, BUFFER_HEIGHT))
     BUFFER.convert()
@@ -106,7 +112,6 @@ def run():
             # print infos about fps and time
             print("FPS: %.2f" % CLOCK.get_fps(), end="\t")
             print("TIME: " + str(pygame.time.get_ticks() // 1000))
-
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:

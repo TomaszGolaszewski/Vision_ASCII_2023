@@ -38,12 +38,6 @@ def draw_in_terminal(table):
         for pixel in row:
             new_row += get_letter_by_density(pixel)
         print(new_row)
-    
-    # for row in table:
-    #     for pixel in row:
-    #         print(get_letter_by_density(pixel), end="")
-    #     print("")
-
     print("")
 
 
