@@ -1,5 +1,6 @@
-# Vision_Blob_2023
+# Vision_ASCII_2023
 Quick test to check OpenCV Library and prepare know-how for future projects.
+The main scope is to convert the camera image into ascii graphics.
 
 ## main_ascii_camera
 - Run the file _main_ascii_camera.py_ to convert your camera image into ascii image.
@@ -10,6 +11,7 @@ Quick test to check OpenCV Library and prepare know-how for future projects.
 </p>
 
 ## main_glowing_balls
+(temporarily left here for future development in a separate project)
 - Quick project to check metaballs and color palette behavior.
 - Run the file_main_glowing_balls.py_ to see bouncing glowing balls.
 
